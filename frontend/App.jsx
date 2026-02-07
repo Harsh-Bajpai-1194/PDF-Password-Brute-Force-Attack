@@ -4,42 +4,48 @@ import axios from 'axios';
 function App() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState(null);
 
   const handleUpload = async () => {
-    if (!file) return alert("Select a PDF first");
+    if (!file) return alert("Please select a PDF file.");
     
     setLoading(true);
+    setResult(null);
     const formData = new FormData();
     formData.append('pdf', file);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/recover', formData);
-      setResult(`Success! Password is: ${response.data.password}`);
-    } catch (error) {
-      setResult("Failed to recover password. Ensure it is a 4-digit PIN.");
+      // Pointing to your Node.js backend
+      const res = await axios.post('http://localhost:5000/api/recover', formData);
+      setResult({ status: 'success', data: res.data.password });
+    } catch (err) {
+      setResult({ status: 'error', data: "Recovery failed. PIN might be outside 0000-9999." });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: '40px', textAlign: 'center' }}>
-      <h1>PDF PIN Recovery Tool</h1>
-      <p>Ethical use only. Use this for files you own.</p>
+    <div style={{ padding: '50px', fontFamily: 'sans-serif' }}>
+      <h2>PDF Password Recovery (0000-9999)</h2>
+      <input type="file" accept=".pdf" onChange={(e) => setFile(e.target.files[0])} />
       
-      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-      <button onClick={handleUpload} disabled={loading}>
-        {loading ? "Searching 0000-9999..." : "Start Recovery"}
+      <button onClick={handleUpload} disabled={loading} style={{ marginLeft: '10px' }}>
+        {loading ? "Brute-forcing... Please wait" : "Start Attack"}
       </button>
 
-      {result && <div style={{ marginTop: '20px', fontWeight: 'bold' }}>{result}</div>}
-      
-      <footer style={{ marginTop: '50px', fontSize: '12px', color: 'gray' }}>
-        Developed by Harsh Bajpai | Zerythron Marketing & GDG PSIT
+      {loading && <p>System is testing 10,000 combinations. This may take a moment...</p>}
+
+      {result && (
+        <div style={{ marginTop: '20px', color: result.status === 'success' ? 'green' : 'red' }}>
+          {result.status === 'success' ? `Found Password: ${result.data}` : result.data}
+        </div>
+      )}
+
+      <footer style={{ marginTop: '100px', fontSize: '12px' }}>
+        Developed by Harsh Bajpai | GDG PSIT
       </footer>
     </div>
   );
 }
-
 export default App;
