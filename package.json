@@ -1,0 +1,21 @@
+{
+  "name": "pdf-password-brute-force-attack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harsh-Bajpai-1194/PDF-Password-Brute-Force-Attack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Harsh-Bajpai-1194/PDF-Password-Brute-Force-Attack/issues"
+  },
+  "homepage": "https://github.com/Harsh-Bajpai-1194/PDF-Password-Brute-Force-Attack#readme"
+}
